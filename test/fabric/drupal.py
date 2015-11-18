@@ -9,16 +9,10 @@ def check():
 
     site = "http://localhost/"
     string = "example.com"
-    apache_process = 'apache2'
     php_package = 'php5'
-    mysql_process = 'mysql'
 
     assert port.is_listening(80), 'Port 80 is not listening.'
     assert package.installed(php_package), 'PHP is not installed.'
-    assert process.is_up(apache_process), 'Apache is not running.'
-    assert process.is_up(mysql_process), 'MySQL is not running.'
-    assert service.is_enabled(apache_process), 'Apache is disabled at boot.'
-    assert service.is_enabled(mysql_process), 'MySQL is disabled at boot.'
     assert http_check(site, string), 'Drupal is not responding as expected.'
 
 
