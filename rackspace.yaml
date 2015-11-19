@@ -74,7 +74,7 @@ instructions: |
 
   Drupal was installed using [Drush](http://www.drush.org/en/master/). Drupal
   is installed into /var/www/vhosts/<YOUR DOMAIN>/ and served by
-  [Apache](http://httpd.apache.org/).
+  [nginx](https://www.nginx.com/).
 
   Because this stack is intended for lower-traffic deployments, there is no
   caching configured.
@@ -141,7 +141,7 @@ description: |
 
   This stack is running the latest version of 
   [Drupal](https://www.drupal.org/),
-  [Apache](http://httpd.apache.org/),
-  and [PHP](http://php.net/).
+  [nginx](https://www.nginx.com/),
+  and [PHP FPM](http://php-fpm.org/).
   with a Cloud Database running
   [MySQL 5.6](http://www.mysql.com/about/).
