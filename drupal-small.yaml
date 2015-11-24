@@ -125,16 +125,6 @@ resources:
     type: OS::Heat::SoftwareConfig
     properties:
       group: ansible
-      inputs:
-      - default: "[]"
-        name: lsync_servers
-        type: CommaDelimitedList
-      - default: "[]"
-        name: firewall_nodes
-        type: CommaDelimitedList
-      - default: "[]"
-        name: firewall_node_rules
-        type: CommaDelimitedList
       config: |
         ---
         - name: Install and configure Drupal
@@ -147,9 +137,29 @@ resources:
           - holland
           - composer
           - drupal
+          - phpmyadmin
+  other_config:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ansible
+      inputs:
+      - default: "[]"
+        name: lsync_servers
+        type: CommaDelimitedList
+      - default: "[]"
+        name: firewall_nodes
+        type: CommaDelimitedList
+      - default: "[]"
+        name: firewall_node_rules
+        type: CommaDelimitedList
+      config: |
+        ---
+        - name: Install and configure other things
+          hosts: localhost
+          connection: local
+          roles:
           - firewall
           - lsync
-          - phpmyadmin
   deploy_roles:
     type: OS::Heat::SoftwareDeployment
     properties:
@@ -166,6 +176,7 @@ resources:
       input_values:
         nginx_vhost_str: { get_param: drupal_url }
         nginx_vhost_template: "drupal"
+        nginx_vhost_phpmyadmin: "True"
         tz: "America/Chicago"
         holland_mysql_user: "holland"
         holland_mysql_password: {  get_attr: [holland_pass, value] }
@@ -187,6 +198,22 @@ resources:
         phpmyadmin_host: { get_attr: [drupal_database, hostname] }
       config:
         get_resource: drupal_config
+      server:
+        get_resource: drupal_server
+  deploy_other:
+    type: OS::Heat::SoftwareDeployment
+    depends_on: deploy_drupal
+    properties:
+      signal_transport: TEMP_URL_SIGNAL
+      input_values:
+        lsync_private_key: { get_attr: [ssh_key, private_key] }
+        lsync_servers:
+          get_attr: [drupal_secondary, private_ip]
+        firewall_global_rules: [ "0.0.0.0,0,22,tcp", "0.0.0.0,0,80,tcp", "0.0.0.0,0,443,tcp"]
+        firewall_nodes: { get_attr: [drupal_secondary, private_ip] }
+        firewall_node_rules: ["32,3306,tcp"]
+      config:
+        get_resource: other_config
       server:
         get_resource: drupal_server
   #Master Server
