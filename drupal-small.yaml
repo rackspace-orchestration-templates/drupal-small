@@ -189,12 +189,6 @@ resources:
         drupal_domain: { get_param: drupal_url }
         drupal_user: { get_param: drupal_user }
         drupal_password: { get_attr: [drupal_pass, value] }
-        lsync_private_key: { get_attr: [ssh_key, private_key] }
-        lsync_servers:
-          get_attr: [drupal_secondary, private_ip]
-        firewall_global_rules: [ "0.0.0.0,0,22,tcp", "0.0.0.0,0,80,tcp", "0.0.0.0,0,443,tcp"]
-        firewall_nodes: { get_attr: [drupal_secondary, private_ip] }
-        firewall_node_rules: ["32,3306,tcp"]
         phpmyadmin_host: { get_attr: [drupal_database, hostname] }
       config:
         get_resource: drupal_config
