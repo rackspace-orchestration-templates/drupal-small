@@ -35,7 +35,6 @@ class DrupalInteraction(object):
             redirected_url = r.headers.get('location')
             r = self.session.get(re.sub(self.domain, "http://" + self.ip + "/", redirected_url))
         print "status code is {}".format(r.status_code)
-        print r.text
         return r.text
 
     def login_successful(self):

@@ -59,15 +59,16 @@ parameters:
     default: 4 GB General Purpose v1
     constraints:
     - allowed_values:
+      - 1 GB General Purpose v1
       - 2 GB General Purpose v1
       - 4 GB General Purpose v1
       - 8 GB General Purpose v1
-  server_image:
-    type: string
-    default: 96a06fc9-c230-422c-81d4-562f97517a5b
-    constraints:
-    - allowed_values:
-      - 96a06fc9-c230-422c-81d4-562f97517a5b
+#  server_image:
+#    type: string
+#    default: f4bbbce2-50b0-4b07-bf09-96c175a45f4b
+#    constraints:
+#    - allowed_values:
+#      - f4bbbce2-50b0-4b07-bf09-96c175a45f4b
   server_count:
     type: number
     default: 0
@@ -205,7 +206,7 @@ resources:
           get_attr: [drupal_secondary, private_ip]
         firewall_global_rules: [ "0.0.0.0,0,22,tcp", "0.0.0.0,0,80,tcp", "0.0.0.0,0,443,tcp"]
         firewall_nodes: { get_attr: [drupal_secondary, private_ip] }
-        firewall_node_rules: ["32,3306,tcp"]
+        firewall_node_rules: []
       config:
         get_resource: other_config
       server:
@@ -215,7 +216,8 @@ resources:
     type: OS::Nova::Server
     properties:
       name: { get_param: "OS::stack_name" }
-      image: { get_param: server_image }
+#      image: { get_param: server_image }
+      image: f4bbbce2-50b0-4b07-bf09-96c175a45f4b
       flavor: { get_param: server_flavor }
       key_name: { get_resource: ssh_key }
       software_config_transport: POLL_TEMP_URL
@@ -319,7 +321,8 @@ resources:
         properties:
           ssh_key: { get_resource: ssh_key }
           parent_stack_id: { get_param: "OS::stack_id" }
-          server_image: { get_param: server_image }
+#          server_image: { get_param: server_image }
+          server_image: f4bbbce2-50b0-4b07-bf09-96c175a45f4b
           server_flavor: { get_param: server_flavor }
           apache_default_domain: { get_param: drupal_url }
           master_server: { get_attr: [ drupal_server, networks, private, 0] }
