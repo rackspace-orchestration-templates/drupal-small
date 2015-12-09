@@ -57,6 +57,8 @@ parameters:
   server_flavor:
     type: string
     default: 4 GB General Purpose v1
+    label: Server Flavor
+    description: Flavor of Cloud Server to use 
     constraints:
     - allowed_values:
       - 1 GB General Purpose v1
@@ -72,6 +74,8 @@ parameters:
   server_count:
     type: number
     default: 0
+    label: Number of Secondary Servers
+    description: Number of secondary web nodes
     constraints:
       - range: { min: 0, max: 10 }
 
