@@ -133,13 +133,14 @@ resources:
       datastore_version: "5.1"
       databases:
       - name: drupal
+      - name: phpmyadmin
       users:
       - name: drupal
         password: { get_attr: [database_pass, value] }
-        databases: [drupal]
+        databases: [drupal, phpmyadmin]
       - name: holland
         password: { get_attr: [holland_pass, value] }
-        databases: [drupal]
+        databases: [drupal, phpmyadmin]
   #Software Configurations
   upload_role_config:
     type: OS::Heat::SoftwareConfig
@@ -150,7 +151,7 @@ resources:
       config: |
         #!/bin/bash
         set -e
-        git clone -b 'stable' --single-branch --progress https://github.com/rackspace-orchestration-templates/ansible-roles.git /etc/ansible/roles > $heat_outputs_path.results 2>&1
+        git clone -b 'master' --single-branch --progress https://github.com/rackspace-orchestration-templates/ansible-roles.git /etc/ansible/roles > $heat_outputs_path.results 2>&1
   drupal_config:
     type: OS::Heat::SoftwareConfig
     properties:
@@ -220,6 +221,8 @@ resources:
         drupal_user: { get_param: drupal_user }
         drupal_password: { get_attr: [drupal_pass, value] }
         phpmyadmin_host: { get_attr: [drupal_database, hostname] }
+        phpmyadmin_user: "drupal"
+        phpmyadmin_pass: { get_attr: [database_pass, value] }
       config:
         get_resource: drupal_config
       server:
