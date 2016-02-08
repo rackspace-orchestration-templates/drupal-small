@@ -23,7 +23,6 @@ test-cases:
             use_ssh_config: True
             fabfile: test/fabric/drupal.py # Path to envassert test
 
-test-cases:
 - name: Single Server Build Test # Deploy using defalt options, single server
   create:
     timeout: 30 # Deployment should complete in under 30 minutes
