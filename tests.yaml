@@ -5,7 +5,7 @@ test-cases:
     parameters:
       server_flavor: 1 GB General Purpose v1
   resource_tests: # Tests to run on the resources themselves
-    ssh_private_key: { get_output: private_key } # Fetch from output-list of stack
+    ssh_private_key: { get_output: ssh_private_key } # Fetch from output-list of stack
     ssh_key_file: tmp/private_key # File to write with ssh_private_key
     tests:
     - drupal_server:
