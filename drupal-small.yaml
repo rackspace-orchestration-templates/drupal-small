@@ -26,7 +26,6 @@ parameter_groups:
   - drupal_email
 - label: rax-dev-params
   parameters:
-  - server_image
   - secondary_template
   - ansible_source
 
