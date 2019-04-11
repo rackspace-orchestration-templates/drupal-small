@@ -87,18 +87,9 @@ When uploading content, it only needs to be uploaded to the Master node,
 and will be automatically synchronized to all secondary nodes.
 
 MySQL is being hosted on a Cloud Database instance, running MySQL 5.6.
-Backups for MySQL are provided by [Holland](http://wiki.hollandbackup.org/),
-which is running on the Master server.
-
 Backups are configured using Cloud Backups.  The Master server is configured
-to back up /var/spool/holland and /var/www once per week, and to retain
+to back up /var/www once per week, and to retain
 these backups for 30 days.
-
-In order to restore the Database from backup, you will need to first restore
-/var/spool/holland from the appropriate Cloud Backup.  After you have done so,
-you will need to log into the Master server and restore the Holland backup
-to the Cloud Database via the MySQL client.  For more assistance, please
-contact your Support team.
 
 Monitoring is configured to verify that Apache is running on both the Master
 and all secondary servers, as well as that the Cloud Load Balancer is

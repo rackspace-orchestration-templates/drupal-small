@@ -69,7 +69,6 @@ parameters:
     description: Flavor of Cloud Server to use
     constraints:
     - allowed_values:
-      - 1 GB General Purpose v1
       - 2 GB General Purpose v1
       - 4 GB General Purpose v1
       - 8 GB General Purpose v1
@@ -99,12 +98,12 @@ parameters:
       - 64GB Instance
   server_image:
     type: string
-    default: Ubuntu 14.04 LTS (Trusty Tahr) (PVHVM) (Orchestration)
+    default: Ubuntu 16.04 LTS (Xenial Xerus) (PVHVM) (Orchestration)
     label: Server Image
     description: Image to be used for all servers in this stack
     constraints:
     - allowed_values:
-      - Ubuntu 14.04 LTS (Trusty Tahr) (PVHVM) (Orchestration)
+      - Ubuntu 16.04 LTS (Xenial Xerus) (PVHVM) (Orchestration)
       - CentOS 7 (PVHVM) (Orchestration)
     immutable: true
   server_count:
@@ -133,8 +132,6 @@ resources:
     type: OS::Heat::RandomString
   database_pass:
     type: OS::Heat::RandomString
-  holland_pass:
-    type: OS::Heat::RandomString
   #SSH Key
   ssh_key:
     type: OS::Nova::KeyPair
@@ -159,9 +156,6 @@ resources:
       users:
       - name: drupal
         password: { get_attr: [database_pass, value] }
-        databases: [drupal, phpmyadmin]
-      - name: holland
-        password: { get_attr: [holland_pass, value] }
         databases: [drupal, phpmyadmin]
   #Software Configurations
   upload_role_config:
@@ -193,7 +187,6 @@ resources:
           - common
           - nginx
           - php-fpm
-          - holland
           - composer
           - drupal
           - phpmyadmin
@@ -237,10 +230,6 @@ resources:
         nginx_vhost_template: "drupal"
         nginx_vhost_phpmyadmin: "True"
         tz: "America/Chicago"
-        holland_mysql_user: "holland"
-        holland_mysql_password: {  get_attr: [holland_pass, value] }
-        holland_mysql_host: { get_attr: [drupal_database, hostname] }
-        holland_create_user: "no"
         drupal_db_host: { get_attr: [drupal_database, hostname] }
         drupal_db_name: "drupal"
         drupal_db_user: "drupal"
@@ -357,8 +346,6 @@ resources:
           params:
             stack: { get_param: "OS::stack_name" }
       Inclusions:
-      - FilePath: "/var/spool/holland"
-        FileItemType: "Folder"
       - FilePath: "/var/www/"
         FileItemType: "Folder"
       NotifyFailure: true
