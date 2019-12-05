@@ -157,6 +157,17 @@ resources:
       - name: drupal
         password: { get_attr: [database_pass, value] }
         databases: [drupal, phpmyadmin]
+
+  # Cloud Database backup
+  drupal_db_backup:
+    type: Rackspace::CloudDatabase::ScheduledBackup
+    properties:
+      source:
+        id: { get_resource: drupal_database }
+        type: instance
+      day_of_week: 6
+      full_backup_retention: 2
+
   #Software Configurations
   upload_role_config:
     type: OS::Heat::SoftwareConfig
@@ -186,6 +197,7 @@ resources:
           roles:
           - common
           - nginx
+          - php
           - php-fpm
           - composer
           - drupal
